@@ -6,18 +6,20 @@ import { useContext, useEffect, useState } from 'react'
 import { HiOutlineChevronDown } from 'react-icons/hi2'
 import { IoIosLogOut } from 'react-icons/io'
 import { NavLink, useLocation } from 'react-router-dom'
-import { drawerLinks } from './drawerLinks'
+import { drawerLinks, sellerDrawerLinks } from './drawerLinks'
 
 const Drawer = () => {
   const [selectedId, setSelectedId] = useState<number>(0)
   const location = useLocation()
-  const { isDrawerShow, setDrawerShow } = useContext(AuthContext)
+  const { isDrawerShow, setDrawerShow, user } = useContext(AuthContext)
 
   useEffect(() => {
     setSelectedId(0)
   }, [location.pathname])
 
   const { logOut } = useContext(AuthContext)
+
+  const filteredDrawerLinks = user?.role === 'admin' ? drawerLinks : sellerDrawerLinks
 
   return (
     <>
@@ -32,7 +34,7 @@ const Drawer = () => {
       >
         <img src={logo} className='w-40' alt='Visasis' />
         <ul className='mt-6'>
-          {drawerLinks.map((menu, i) => {
+          {filteredDrawerLinks.map((menu, i) => {
             if (menu.child) {
               return (
                 <li

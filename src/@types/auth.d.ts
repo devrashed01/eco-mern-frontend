@@ -13,11 +13,15 @@ type User = {
   name: string
   email: string
   phone: string
-  status: string
+  status: UserStatus
   commission: number
-  role: string
+  address: string
+  role: UserRole
   createdAt: Date
   updatedAt: Date
   avatar?: string
   __v: number
 }
+
+type UserStatus = 'active' | 'inactive' | 'pending'
+type UserRole = 'admin' | 'seller'

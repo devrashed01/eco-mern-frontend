@@ -13,6 +13,7 @@ import { assetUrl } from 'utils/url'
 interface Form {
   name?: string
   phone?: string
+  address?: string
 }
 
 export default function ProfilePage() {
@@ -23,7 +24,9 @@ export default function ProfilePage() {
   const [form, setForm] = useState<Form>({
     name: user?.name,
     phone: user?.phone,
+    address: user?.address,
   })
+  const [errors, setError] = useState<Form>()
 
   const [file, setFile] = useState<File | null>(null)
 
@@ -31,6 +34,7 @@ export default function ProfilePage() {
     setForm({
       name: user?.name,
       phone: user?.phone,
+      address: user?.address,
     })
   }, [user])
 
@@ -42,10 +46,12 @@ export default function ProfilePage() {
         queryClient.invalidateQueries('get-profile')
       },
       onError: (error: any) => {
+        error.response.data?.errors && setError(error.response.data?.errors)
         toast.error(error.response.data.message)
         setForm({
           name: user?.name,
           phone: user?.phone,
+          address: user?.address,
         })
       },
     },
@@ -56,6 +62,10 @@ export default function ProfilePage() {
       ...form,
       [e.target.name]: e.target.value,
     })
+    setError({
+      ...errors,
+      [e.target.name]: '',
+    })
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +74,7 @@ export default function ProfilePage() {
       const formData = new FormData()
       formData.append('name', form.name || '')
       formData.append('phone', form.phone || '')
+      formData.append('address', form.address || '')
       formData.append('avatar', e.target.files[0])
       updateProfileMutation.mutate(formData)
     }
@@ -72,11 +83,19 @@ export default function ProfilePage() {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    if (!form.name || !form.phone) return toast.error('Please fill all fields')
+    if (!form.name || !form.phone || !form.address) {
+      setError({
+        name: !form.name ? 'Name is required' : '',
+        phone: !form.phone ? 'Phone is required' : '',
+        address: !form.address ? 'Address is required' : '',
+      })
+      return
+    }
 
     const formData = new FormData()
     formData.append('name', form.name)
     formData.append('phone', form.phone)
+    formData.append('address', form.address)
     if (file) {
       formData.append('avatar', file)
     }
@@ -105,8 +124,30 @@ export default function ProfilePage() {
         <h2>Profile</h2>
         <form onSubmit={submitHandler}>
           <div className='grid gap-5 my-5 grid-cols-1 sm:grid-cols-2'>
-            <Input label='Name' name='name' value={form.name} onChange={changeHandler} />
-            <Input label='Phone' name='phone' value={form.phone} onChange={changeHandler} />
+            <Input
+              error={!!errors?.name}
+              helpText={errors?.name}
+              label='Name'
+              name='name'
+              value={form.name}
+              onChange={changeHandler}
+            />
+            <Input
+              error={!!errors?.phone}
+              helpText={errors?.phone}
+              label='Phone'
+              name='phone'
+              value={form.phone}
+              onChange={changeHandler}
+            />
+            <Input
+              error={!!errors?.address}
+              helpText={errors?.address}
+              label='Address'
+              name='address'
+              value={form.address}
+              onChange={changeHandler}
+            />
           </div>
 
           <Button isLoading={updateProfileMutation.isLoading} className='!px-10'>

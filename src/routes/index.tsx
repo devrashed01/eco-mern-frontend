@@ -7,6 +7,7 @@ import PageNotFound from './404'
 import Dashboard from './dashboard'
 import LoginPage from './login'
 import ProfilePage from './profile'
+import UsersPage from './users'
 
 const privateRoute: RouteObject[] = [
   {
@@ -30,20 +31,30 @@ const privateRoute: RouteObject[] = [
           </PageWrapper>
         ),
       },
-      // {
-      //   path: 'all-bookings',
-      //   children: [
-      //     { index: true, element: <Navigate to='current' /> },
-      //     {
-      //       path: 'current',
-      //       element: (
-      //         <PageWrapper title='Current Bookings'>
-      //           <BookingsPage booking_type='queued' />
-      //         </PageWrapper>
-      //       ),
-      //     },
-      //   ],
-      // },
+      {
+        path: 'users/active',
+        element: (
+          <PageWrapper role='admin' title='Active Users'>
+            <UsersPage user_type='active' />
+          </PageWrapper>
+        ),
+      },
+      {
+        path: 'users/inactive',
+        element: (
+          <PageWrapper role='admin' title='Inactive Users'>
+            <UsersPage user_type='inactive' />
+          </PageWrapper>
+        ),
+      },
+      {
+        path: 'users/pending',
+        element: (
+          <PageWrapper role='admin' title='Pending Users'>
+            <UsersPage user_type='pending' />
+          </PageWrapper>
+        ),
+      },
       { path: 'login', element: <Navigate to='/' /> },
       { path: 'signup', element: <Navigate to='/' /> },
       { path: '*', element: <PageNotFound /> },

@@ -1,4 +1,4 @@
-import PatientsIcon from 'components/icons/PatientsIcon'
+import { RiUserSettingsFill } from 'react-icons/ri'
 import { RxDashboard } from 'react-icons/rx'
 
 export const drawerLinks: DrawerLink[] = [
@@ -7,15 +7,32 @@ export const drawerLinks: DrawerLink[] = [
     link: '/dashboard',
     icon: RxDashboard,
   },
+
   {
-    label: 'All Patients',
-    link: '/all-patients',
-    icon: PatientsIcon,
+    label: 'All Users',
+    link: '/users',
+    icon: RiUserSettingsFill,
     child: [
       {
-        label: 'Pending Patients',
-        link: '/all-patients/pending',
+        label: 'Pending Users',
+        link: '/users/pending',
+      },
+      {
+        label: 'Active Users',
+        link: '/users/active',
+      },
+      {
+        label: 'Inactive Users',
+        link: '/users/inactive',
       },
     ],
+  },
+]
+
+export const sellerDrawerLinks: DrawerLink[] = [
+  {
+    label: 'Dashboard',
+    link: '/dashboard',
+    icon: RxDashboard,
   },
 ]

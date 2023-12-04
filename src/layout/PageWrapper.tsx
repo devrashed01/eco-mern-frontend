@@ -6,10 +6,19 @@ import { Link } from 'react-router-dom'
 
 type Props = {
   title: string
+  role?: UserRole
 }
 
-export default function PageWrapper({ title, children }: PropsWithChildren<Props>) {
+export default function PageWrapper({ title, children, role }: PropsWithChildren<Props>) {
   const { setDrawerShow, user } = useContext(AuthContext)
+
+  if (role && user?.role !== role) {
+    return (
+      <div className='h-screen flex'>
+        <p className='m-auto text-2xl'>You are not allowed to access this page.</p>
+      </div>
+    )
+  }
 
   return (
     <div>

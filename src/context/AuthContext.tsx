@@ -1,7 +1,6 @@
-import { privateRequest } from 'config/axios.config'
 import queryString from 'query-string'
 import { createContext, PropsWithChildren, useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import toast from 'react-hot-toast'
 import { loginRedirectUrl } from 'utils/url'
 
 const initState: State = {
@@ -39,15 +38,18 @@ const AuthContextProvider = ({ children }: PropsWithChildren<unknown>) => {
   }
 
   const logOut = async () => {
-    toast.promise(privateRequest.post('user/logout'), {
-      loading: 'Logging out...',
-      success: () => {
-        localStorage.removeItem('token')
-        window.location.replace(loginRedirectUrl)
-        return 'Logged out successfully'
-      },
-      error: 'Failed to log out',
-    })
+    localStorage.removeItem('token')
+    window.location.replace(loginRedirectUrl)
+    toast.success('Logged out successfully')
+    // toast.promise(privateRequest.post('user/logout'), {
+    //   loading: 'Logging out...',
+    //   success: () => {
+    //     localStorage.removeItem('token')
+    //     window.location.replace(loginRedirectUrl)
+    //     return 'Logged out successfully'
+    //   },
+    //   error: 'Failed to log out',
+    // })
   }
 
   return (
