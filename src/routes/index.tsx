@@ -7,6 +7,7 @@ import PageNotFound from './404'
 import Dashboard from './dashboard'
 import LoginPage from './login'
 import ProfilePage from './profile'
+import RegisterPage from './register'
 import SalesPage from './sales'
 import UsersPage from './users'
 
@@ -65,7 +66,7 @@ const privateRoute: RouteObject[] = [
         ),
       },
       { path: 'login', element: <Navigate to='/' /> },
-      { path: 'signup', element: <Navigate to='/' /> },
+      { path: 'register', element: <Navigate to='/' /> },
       { path: '*', element: <PageNotFound /> },
     ],
   },
@@ -73,6 +74,7 @@ const privateRoute: RouteObject[] = [
 
 const publicRoute: RouteObject[] = [
   { path: 'login', element: <LoginPage /> },
+  { path: 'register', element: <RegisterPage /> },
   { path: '*', element: <Navigate to='/login' /> },
 ]
 

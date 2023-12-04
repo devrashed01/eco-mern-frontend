@@ -8,6 +8,7 @@ import { SyntheticEvent, useContext, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { BsEye } from 'react-icons/bs'
 import { useMutation } from 'react-query'
+import { Link } from 'react-router-dom'
 import { errorHandler } from 'utils/errorHandler'
 
 type Form = {
@@ -86,6 +87,12 @@ export default function LoginPage() {
           </Button>
         </div>
       </form>
+      <p className='mt-6 text-center'>
+        {`Don't`} have an account?{' '}
+        <Link to='/register' className='text-success hover:underline'>
+          Register
+        </Link>
+      </p>
     </AuthLayout>
   )
 }
