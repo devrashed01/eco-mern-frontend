@@ -1,4 +1,4 @@
-import { RiUserSettingsFill } from 'react-icons/ri'
+import { RiProductHuntFill, RiUserSettingsFill } from 'react-icons/ri'
 import { RxDashboard } from 'react-icons/rx'
 
 export const drawerLinks: DrawerLink[] = [
@@ -7,7 +7,6 @@ export const drawerLinks: DrawerLink[] = [
     link: '/dashboard',
     icon: RxDashboard,
   },
-
   {
     label: 'All Users',
     link: '/users',
@@ -26,6 +25,11 @@ export const drawerLinks: DrawerLink[] = [
         link: '/users/inactive',
       },
     ],
+  },
+  {
+    label: 'Sales',
+    link: '/sales',
+    icon: RiProductHuntFill,
   },
 ]
 

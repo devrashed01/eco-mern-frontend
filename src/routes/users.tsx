@@ -66,7 +66,7 @@ export default function UsersPage({ user_type }: Props) {
     <div className='card'>
       <div className='flex mb-10'>
         <Button to='/all-users/add' icon='add' variant='outlined' size='md'>
-          Add New
+          Add Seller
         </Button>
         <Input
           variant='outlined'

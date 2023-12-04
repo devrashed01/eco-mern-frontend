@@ -7,6 +7,7 @@ import PageNotFound from './404'
 import Dashboard from './dashboard'
 import LoginPage from './login'
 import ProfilePage from './profile'
+import SalesPage from './sales'
 import UsersPage from './users'
 
 const privateRoute: RouteObject[] = [
@@ -52,6 +53,14 @@ const privateRoute: RouteObject[] = [
         element: (
           <PageWrapper role='admin' title='Pending Users'>
             <UsersPage user_type='pending' />
+          </PageWrapper>
+        ),
+      },
+      {
+        path: 'sales',
+        element: (
+          <PageWrapper title='Sales'>
+            <SalesPage />
           </PageWrapper>
         ),
       },
