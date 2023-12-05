@@ -62,6 +62,26 @@ export default function UsersPage({ user_type }: Props) {
       },
     },
   )
+  const { mutateAsync: generateResetLink } = useMutation<
+    { message: string; resetPasswordLink: string },
+    Error,
+    string
+  >(
+    async (id) => {
+      try {
+        const rest = await privateRequest.get(`admin/user/generateResetPasswordLink/${id}`)
+        return rest.data
+      } catch (error) {
+        errorHandler(error)
+      }
+    },
+    {
+      onSuccess: (data) => {
+        copy(data.resetPasswordLink)
+        toast.success('Link copied to your clipboard')
+      },
+    },
+  )
 
   const users = data?.pages?.flatMap((page) => page.docs) ?? []
 
@@ -150,7 +170,7 @@ export default function UsersPage({ user_type }: Props) {
                 <tr key={row._id}>
                   <td>{dateFormatter(row.createdAt)}</td>
                   <td>{row.name}</td>
-                  <td>
+                  <td className='flex gap-2 items-center'>
                     {row._id}{' '}
                     <Badge
                       onClick={() => {
@@ -164,6 +184,27 @@ export default function UsersPage({ user_type }: Props) {
                   <td>{row.phone}</td>
                   <td>
                     <div className='inline-flex gap-2'>
+                      <Button
+                        onClick={() =>
+                          confirmation
+                            .show({
+                              phase: 'primary',
+                              header: 'Generate reset password link for this user ?',
+                              buttonText: 'Generate',
+                            })
+                            .then(() =>
+                              toast.promise(generateResetLink(row._id), {
+                                loading: 'Generating link...',
+                                success: (res) =>
+                                  res.message ?? 'Reset Link generated successfully',
+                                error: (err) => err.message ?? 'Something went wrong!',
+                              }),
+                            )
+                        }
+                        size='sm'
+                      >
+                        Generate Reset Link
+                      </Button>
                       {user_type === 'inactive' && (
                         <Button
                           onClick={() =>
