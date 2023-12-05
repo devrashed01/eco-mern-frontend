@@ -11,7 +11,7 @@ import { drawerLinks, sellerDrawerLinks } from './drawerLinks'
 const Drawer = () => {
   const [selectedId, setSelectedId] = useState<number>(0)
   const location = useLocation()
-  const { isDrawerShow, setDrawerShow, user } = useContext(AuthContext)
+  const { isDrawerShow, setDrawerShow, isAdmin } = useContext(AuthContext)
 
   useEffect(() => {
     setSelectedId(0)
@@ -19,7 +19,7 @@ const Drawer = () => {
 
   const { logOut } = useContext(AuthContext)
 
-  const filteredDrawerLinks = user?.role === 'admin' ? drawerLinks : sellerDrawerLinks
+  const filteredDrawerLinks = isAdmin ? drawerLinks : sellerDrawerLinks
 
   return (
     <>

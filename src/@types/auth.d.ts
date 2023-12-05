@@ -6,6 +6,7 @@ type AuthState = {
   setUser: (user: User) => void
   setToken: (token: string) => void
   logOut: () => void
+  isAdmin?: boolean
 }
 
 type User = {
@@ -24,4 +25,4 @@ type User = {
 }
 
 type UserStatus = 'active' | 'inactive' | 'pending'
-type UserRole = 'admin' | 'seller'
+type UserRole = 'admin' | 'seller' | 'superadmin'

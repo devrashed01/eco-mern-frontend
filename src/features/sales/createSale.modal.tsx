@@ -2,7 +2,8 @@ import NiceModal, { useModal } from '@ebay/nice-modal-react'
 import Button from 'components/form/button'
 import Input from 'components/form/input'
 import { privateRequest } from 'config/axios.config'
-import { useState } from 'react'
+import { AuthContext } from 'context/AuthContext'
+import { useContext, useState } from 'react'
 import toast from 'react-hot-toast'
 import { BsPlus } from 'react-icons/bs'
 import { MdDelete } from 'react-icons/md'
@@ -28,7 +29,7 @@ type Product = {
 interface Form {
   customerName: string
   discount: string
-  user: string
+  user?: string
   products: Product[]
 }
 
@@ -40,7 +41,7 @@ const initForm = {
 }
 
 export default NiceModal.create(() => {
-  // Use a hook to manage the modal state
+  const { isAdmin } = useContext(AuthContext)
   const modal = useModal()
   const queryClient = useQueryClient()
 
@@ -50,8 +51,9 @@ export default NiceModal.create(() => {
 
   const addProductToSaleModalForm = useModal(addProductToSaleModal)
 
+  const url = isAdmin ? 'admin/sales/create' : 'seller/sales/create'
   const createSaleMutation = useMutation<{ message: string }, Error, any>(
-    async (payload) => await privateRequest.post('admin/sales/create', payload),
+    async (payload) => await privateRequest.post(url, payload),
     {
       onSuccess: (data) => {
         setForm(initForm)
@@ -101,7 +103,7 @@ export default NiceModal.create(() => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!form.customerName || !form.discount || !form.user) {
+    if (!form.customerName || !form.discount || (isAdmin && !form.user)) {
       setError({
         ...error,
         customerName: !form.customerName ? 'Customer name is required' : '',
@@ -142,14 +144,16 @@ export default NiceModal.create(() => {
           helpText={error.discount}
           onChange={changeHandler}
         />
-        <Input
-          label='User Id'
-          name='user'
-          value={form.user}
-          error={!!error.user}
-          helpText={error.user}
-          onChange={changeHandler}
-        />
+        {isAdmin && (
+          <Input
+            label='User Id'
+            name='user'
+            value={form.user}
+            error={!!error.user}
+            helpText={error.user}
+            onChange={changeHandler}
+          />
+        )}
         <div>
           <h3 className='text-base flex justify-between items-center font-medium text-slate-800 pb-2 border-b border-slate-200'>
             Products

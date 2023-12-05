@@ -10,9 +10,9 @@ type Props = {
 }
 
 export default function PageWrapper({ title, children, role }: PropsWithChildren<Props>) {
-  const { setDrawerShow, user } = useContext(AuthContext)
+  const { setDrawerShow, isAdmin, user } = useContext(AuthContext)
 
-  if (role && user?.role !== role) {
+  if (role === 'admin' && !isAdmin) {
     return (
       <div className='h-screen flex'>
         <p className='m-auto text-2xl'>You are not allowed to access this page.</p>

@@ -18,7 +18,7 @@ import { errorHandler } from 'utils/errorHandler'
 import useDebounce from 'utils/useDebounce'
 
 export default function SalesPage() {
-  const { user } = useContext(AuthContext)
+  const { isAdmin } = useContext(AuthContext)
   const [search, setSearch] = useState<string>('')
   const debouncedSearchTerm = useDebounce(search, 500)
 
@@ -29,7 +29,9 @@ export default function SalesPage() {
     async ({ pageParam = 1 }) => {
       try {
         const res = await privateRequest.get(
-          `${user?.role}/sales/list?page=${pageParam}&search=${debouncedSearchTerm}`,
+          `${
+            isAdmin ? 'admin' : 'seller'
+          }/sales/list?page=${pageParam}&search=${debouncedSearchTerm}`,
         )
         return res.data
       } catch (error) {

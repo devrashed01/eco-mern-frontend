@@ -12,6 +12,7 @@ export const AuthContext = createContext<AuthState>(initState as AuthState)
 type State = {
   user?: User
   token?: string
+  isAdmin?: boolean
 }
 
 const AuthContextProvider = ({ children }: PropsWithChildren<unknown>) => {
@@ -19,6 +20,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren<unknown>) => {
   const [auth, setAuth] = useState<State>({
     user: undefined,
     token: localStorage.getItem('token') ?? (token as string),
+    isAdmin: false,
   })
 
   useEffect(() => {
@@ -30,7 +32,11 @@ const AuthContextProvider = ({ children }: PropsWithChildren<unknown>) => {
   const [isDrawerShow, setDrawerShow] = useState<boolean>(false)
 
   const setUser = (user: User) => {
-    setAuth((prev) => ({ ...prev, user: user }))
+    setAuth((prev) => ({
+      ...prev,
+      user: user,
+      isAdmin: user.role === 'admin' || user.role === 'superadmin',
+    }))
   }
 
   const setToken = (token: string) => {
