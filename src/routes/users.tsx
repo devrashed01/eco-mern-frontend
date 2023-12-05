@@ -2,7 +2,6 @@ import { useModal } from '@ebay/nice-modal-react'
 import { BsSearch } from 'react-icons/bs'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query'
-import { Link } from 'react-router-dom'
 
 import clsx from 'clsx'
 import NoMoreData from 'components/NoMoreData'
@@ -12,6 +11,7 @@ import Input from 'components/form/input'
 import confirmationModal from 'components/modal/confirmation.modal'
 import { privateRequest } from 'config/axios.config'
 import copy from 'copy-to-clipboard'
+import createUserModal from 'features/user/createUpdateUser.modal'
 import { useState } from 'react'
 import { LoaderIcon, toast } from 'react-hot-toast'
 import { MdCopyAll } from 'react-icons/md'
@@ -25,6 +25,7 @@ type Props = {
 
 export default function UsersPage({ user_type }: Props) {
   const confirmation = useModal(confirmationModal)
+  const createUserModalForm = useModal(createUserModal)
   const queryClient = useQueryClient()
 
   const [search, setSearch] = useState<string>('')
@@ -88,7 +89,7 @@ export default function UsersPage({ user_type }: Props) {
   return (
     <div className='card'>
       <div className='flex mb-10'>
-        <Button to='/all-users/add' icon='add' variant='outlined' size='md'>
+        <Button onClick={() => createUserModalForm.show()} icon='add' variant='outlined' size='md'>
           Add Seller
         </Button>
         <Input
@@ -273,13 +274,16 @@ export default function UsersPage({ user_type }: Props) {
                           Approve
                         </Button>
                       )}
-                      <Link
-                        className='btn btn-sm btn-default btn-container'
-                        to={`/all-users/edit/${row._id}`}
-                        state={{ data: row }}
+                      <Button
+                        size='sm'
+                        onClick={() =>
+                          createUserModalForm.show({
+                            data: row,
+                          })
+                        }
                       >
                         Edit
-                      </Link>
+                      </Button>
                     </div>
                   </td>
                 </tr>
