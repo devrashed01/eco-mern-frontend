@@ -15,7 +15,6 @@ type Sale = {
   _id: string
   customerName: string
   products: Product[]
-  extras: Extra[]
   subtotal: number
   vat: number
   discount: number
@@ -39,6 +38,7 @@ type Product = {
   quantity: number
   price: number
   _id: string
+  extras: Extra[]
 }
 
 type SaleUser = {

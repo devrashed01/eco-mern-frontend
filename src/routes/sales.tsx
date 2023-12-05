@@ -2,28 +2,34 @@ import { BsSearch } from 'react-icons/bs'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useInfiniteQuery } from 'react-query'
 
+import { useModal } from '@ebay/nice-modal-react'
 import clsx from 'clsx'
 import NoMoreData from 'components/NoMoreData'
 import Skeleton from 'components/Skeleton'
 import Button from 'components/form/button'
 import Input from 'components/form/input'
 import { privateRequest } from 'config/axios.config'
-import { useState } from 'react'
+import { AuthContext } from 'context/AuthContext'
+import createSaleModal from 'features/sales/createSale.modal'
+import { useContext, useState } from 'react'
 import { LoaderIcon } from 'react-hot-toast'
 import { dateFormatter } from 'utils'
 import { errorHandler } from 'utils/errorHandler'
 import useDebounce from 'utils/useDebounce'
 
 export default function SalesPage() {
+  const { user } = useContext(AuthContext)
   const [search, setSearch] = useState<string>('')
   const debouncedSearchTerm = useDebounce(search, 500)
+
+  const createSaleModalForm = useModal(createSaleModal)
 
   const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery<SalesResponse, Error>(
     ['sales', debouncedSearchTerm],
     async ({ pageParam = 1 }) => {
       try {
         const res = await privateRequest.get(
-          `admin/sales/list?page=${pageParam}&search=${debouncedSearchTerm}`,
+          `${user?.role}/sales/list?page=${pageParam}&search=${debouncedSearchTerm}`,
         )
         return res.data
       } catch (error) {
@@ -40,7 +46,7 @@ export default function SalesPage() {
   return (
     <div className='card'>
       <div className='flex mb-10'>
-        <Button to='/all-sales/add' icon='add' variant='outlined' size='md'>
+        <Button onClick={() => createSaleModalForm.show()} icon='add' variant='outlined' size='md'>
           Create Sale
         </Button>
         <Input
@@ -79,6 +85,7 @@ export default function SalesPage() {
                 <td>Customer Name</td>
                 <td>Total</td>
                 <td>Seller name</td>
+                <td>Products</td>
                 <td>Extras</td>
               </tr>
             </thead>
@@ -117,7 +124,12 @@ export default function SalesPage() {
                   <td>${row.total}</td>
                   <td>{row.user?.[0]?.name}</td>
                   <td>
-                    {row.extras?.map((extra, key) => `${extra?.name} ${key !== 0 ? ' , ' : ''}`)}
+                    {row.products?.map((row, key) => `${row?.product} ${key !== 0 ? ' , ' : ''}`)}
+                  </td>
+                  <td>
+                    {row.products
+                      .flatMap((el) => el.extras)
+                      ?.map((extra, key) => `${extra?.name} ${key !== 0 ? ' , ' : ''}`)}
                   </td>
                 </tr>
               ))}

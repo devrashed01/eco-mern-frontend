@@ -39,4 +39,9 @@ export const sellerDrawerLinks: DrawerLink[] = [
     link: '/dashboard',
     icon: RxDashboard,
   },
+  {
+    label: 'Sales',
+    link: '/sales',
+    icon: RiProductHuntFill,
+  },
 ]

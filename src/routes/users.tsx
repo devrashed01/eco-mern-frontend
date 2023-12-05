@@ -6,12 +6,15 @@ import { Link } from 'react-router-dom'
 
 import clsx from 'clsx'
 import NoMoreData from 'components/NoMoreData'
+import Badge from 'components/form/Badge'
 import Button from 'components/form/button'
 import Input from 'components/form/input'
 import confirmationModal from 'components/modal/confirmation.modal'
 import { privateRequest } from 'config/axios.config'
+import copy from 'copy-to-clipboard'
 import { useState } from 'react'
 import { LoaderIcon, toast } from 'react-hot-toast'
+import { MdCopyAll } from 'react-icons/md'
 import { dateFormatter } from 'utils'
 import { errorHandler } from 'utils/errorHandler'
 import useDebounce from 'utils/useDebounce'
@@ -101,6 +104,7 @@ export default function UsersPage({ user_type }: Props) {
             <thead>
               <tr>
                 <td>Joined date</td>
+                <td>ID</td>
                 <td>Full Name</td>
                 <td>Phone Number</td>
                 <td className='w-40'>Action</td>
@@ -146,6 +150,17 @@ export default function UsersPage({ user_type }: Props) {
                 <tr key={row._id}>
                   <td>{dateFormatter(row.createdAt)}</td>
                   <td>{row.name}</td>
+                  <td>
+                    {row._id}{' '}
+                    <Badge
+                      onClick={() => {
+                        copy(row._id)
+                        toast.success('Copied')
+                      }}
+                    >
+                      <MdCopyAll />
+                    </Badge>
+                  </td>
                   <td>{row.phone}</td>
                   <td>
                     <div className='inline-flex gap-2'>
@@ -197,11 +212,19 @@ export default function UsersPage({ user_type }: Props) {
                       {user_type === 'pending' && (
                         <Button
                           onClick={() =>
-                            confirmation.show({
-                              phase: 'primary',
-                              header: 'Are you sure, you approved this user?',
-                              buttonText: 'Yes, Approve',
-                            })
+                            confirmation
+                              .show({
+                                phase: 'primary',
+                                header: 'Are you sure, you approved this user?',
+                                buttonText: 'Yes, Approve',
+                              })
+                              .then(() =>
+                                toast.promise(toggleUserStatus(row._id), {
+                                  loading: 'Approving user...',
+                                  success: (res) => res.message ?? 'User approved successfully',
+                                  error: (err) => err.message ?? 'Something went wrong!',
+                                }),
+                              )
                           }
                           size='sm'
                           color='primary'
