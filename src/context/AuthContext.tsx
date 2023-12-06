@@ -44,7 +44,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren<unknown>) => {
   }
 
   const logOut = async () => {
-    localStorage.removeItem('token')
+    // localStorage.removeItem('token')
     window.location.replace(loginRedirectUrl)
     toast.success('Logged out successfully')
     // toast.promise(privateRequest.post('user/logout'), {
