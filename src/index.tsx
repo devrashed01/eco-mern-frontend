@@ -11,17 +11,27 @@ import Routes from 'routes'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
 
+import { Auth0Provider } from '@auth0/auth0-react'
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <NiceModal.Provider>
-          <BrowserRouter>
-            <Routes />
-            <Toaster position='top-center' />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </BrowserRouter>
+          <Auth0Provider
+            domain={process.env.REACT_APP_domain || ''}
+            clientId={process.env.REACT_APP_clientId || ''}
+            authorizationParams={{
+              redirect_uri: 'https://eco-mern-frontend.vercel.app',
+            }}
+          >
+            <BrowserRouter>
+              <Routes />
+              <Toaster position='top-center' />
+              <ReactQueryDevtools initialIsOpen={false} />
+            </BrowserRouter>
+          </Auth0Provider>
         </NiceModal.Provider>
       </AuthContextProvider>
     </QueryClientProvider>

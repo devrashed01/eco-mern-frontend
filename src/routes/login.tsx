@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import clsx from 'clsx'
 import Button from 'components/form/button'
 import Input from 'components/form/input'
@@ -60,6 +61,22 @@ export default function LoginPage() {
     })
   }
 
+  const { user, isAuthenticated, isLoading } = useAuth0()
+
+  if (isLoading) {
+    return <div>Loading ...</div>
+  }
+
+  if (isAuthenticated)
+    return (
+      <div>
+        <h2>testing with AuthO</h2>
+        <img src={user?.picture} alt={user?.name} />
+        <h2>{user?.name}</h2>
+        <p>{user?.email}</p>
+      </div>
+    )
+
   return (
     <AuthLayout title='Log In Your Account' description='Please provide correct credentials'>
       <form className='flex flex-col gap-6' onSubmit={onSubmit}>
@@ -93,6 +110,13 @@ export default function LoginPage() {
           Register
         </Link>
       </p>
+      <LoginButton />
     </AuthLayout>
   )
+}
+
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0()
+
+  return <button onClick={() => loginWithRedirect()}>Log In</button>
 }
