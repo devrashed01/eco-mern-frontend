@@ -63,7 +63,7 @@ const privateRoute: RouteObject[] = [
           </PageWrapper>
         ),
       },
-      { path: 'login', element: <Navigate to='/' /> },
+      { path: 'login', element: <LoginPage /> },
       { path: 'register', element: <Navigate to='/' /> },
       { path: '*', element: <PageNotFound /> },
     ],
