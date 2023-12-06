@@ -61,13 +61,15 @@ export default function LoginPage() {
     })
   }
 
-  const { user, isAuthenticated, isLoading } = useAuth0()
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0()
 
   if (isLoading) {
     return <div>Loading ...</div>
   }
 
-  if (isAuthenticated)
+  if (isAuthenticated) {
+    const token = getAccessTokenSilently()
+    console.log(token, 'token===')
     return (
       <div>
         <h2>testing with AuthO</h2>
@@ -76,6 +78,7 @@ export default function LoginPage() {
         <p>{user?.email}</p>
       </div>
     )
+  }
 
   return (
     <AuthLayout title='Log In Your Account' description='Please provide correct credentials'>
