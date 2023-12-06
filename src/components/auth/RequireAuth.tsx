@@ -28,7 +28,11 @@ const RequireAuth = () => {
   //   return <UnAuthorized />
   // }
 
-  return <div>none</div>
+  return (
+    <div>
+      <LoginButton />
+    </div>
+  )
 
   return (
     <Layout>
@@ -38,3 +42,9 @@ const RequireAuth = () => {
 }
 
 export default RequireAuth
+
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0()
+
+  return <button onClick={() => loginWithRedirect()}>Log In</button>
+}
