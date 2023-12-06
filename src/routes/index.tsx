@@ -1,7 +1,5 @@
 import RequireAuth from 'components/auth/RequireAuth'
-import { AuthContext } from 'context/AuthContext'
 import PageWrapper from 'layout/PageWrapper'
-import { useContext, useEffect, useState } from 'react'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 import PageNotFound from './404'
 import Dashboard from './dashboard'
@@ -79,20 +77,20 @@ const publicRoute: RouteObject[] = [
 ]
 
 const Routes = () => {
-  const { token } = useContext(AuthContext)
+  // const { token } = useContext(AuthContext)
 
-  const [routes, setRoutes] = useState<RouteObject[]>(token ? privateRoute : publicRoute)
+  // const [routes, setRoutes] = useState<RouteObject[]>(token ? privateRoute : publicRoute)
 
-  // change routes on token state
-  useEffect(() => {
-    setRoutes(token ? privateRoute : publicRoute)
-  }, [token])
+  // // change routes on token state
+  // useEffect(() => {
+  //   setRoutes(token ? privateRoute : publicRoute)
+  // }, [token])
 
-  const appRoutes = useRoutes(routes)
+  const appRoutes = useRoutes(privateRoute)
 
-  if (token) {
-    return <div>{appRoutes}</div>
-  }
+  // if (token) {
+  //   return <div>{appRoutes}</div>
+  // }
 
   return <div>{appRoutes}</div>
 }
