@@ -67,6 +67,8 @@ export default function LoginPage() {
     return <div>Loading ...</div>
   }
 
+  console.log(user, isAuthenticated, isLoading)
+
   if (isAuthenticated) {
     const token = getAccessTokenSilently()
     console.log(token, 'token===')
