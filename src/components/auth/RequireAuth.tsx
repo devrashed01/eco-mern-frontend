@@ -1,27 +1,34 @@
-import { AuthContext } from 'context/AuthContext'
-import { useGetProfile } from 'hooks/profile'
+import { useAuth0 } from '@auth0/auth0-react'
 import Layout from 'layout/Layout'
-import { useContext } from 'react'
-import { LoaderIcon } from 'react-hot-toast'
 import { Outlet } from 'react-router-dom'
-import UnAuthorized from './UnAuthorized'
 
 const RequireAuth = () => {
-  const { setUser } = useContext(AuthContext)
+  // const { setUser } = useContext(AuthContext)
 
-  const { isLoading, isError } = useGetProfile({ onSuccess: (data) => setUser(data) })
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, error } = useAuth0()
 
   if (isLoading) {
-    return (
-      <div className='h-screen flex'>
-        <LoaderIcon className='m-auto w-16 h-16' />
-      </div>
-    )
+    return <div>Loading ...</div>
   }
 
-  if (isError) {
-    return <UnAuthorized />
-  }
+  getAccessTokenSilently().then((token) => console.log(token, 'token==='))
+  console.log(user, isAuthenticated, isLoading, error)
+
+  // const { isLoading, isError } = useGetProfile({ onSuccess: (data) => setUser(data) })
+
+  // if (isLoading) {
+  //   return (
+  //     <div className='h-screen flex'>
+  //       <LoaderIcon className='m-auto w-16 h-16' />
+  //     </div>
+  //   )
+  // }
+
+  // if (isError) {
+  //   return <UnAuthorized />
+  // }
+
+  return <div>none</div>
 
   return (
     <Layout>
