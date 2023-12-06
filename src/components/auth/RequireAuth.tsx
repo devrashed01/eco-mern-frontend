@@ -28,6 +28,17 @@ const RequireAuth = () => {
   //   return <UnAuthorized />
   // }
 
+  if (isAuthenticated) {
+    return (
+      <div>
+        <h2>testing with AuthO</h2>
+        <img src={user?.picture} alt={user?.name} />
+        <h2>{user?.name}</h2>
+        <p>{user?.email}</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <LoginButton />
