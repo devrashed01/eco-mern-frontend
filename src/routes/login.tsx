@@ -61,17 +61,17 @@ export default function LoginPage() {
     })
   }
 
-  const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0()
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently, error } = useAuth0()
 
   if (isLoading) {
     return <div>Loading ...</div>
   }
 
-  console.log(user, isAuthenticated, isLoading)
+  const token = getAccessTokenSilently()
+  console.log(token, 'token===')
+  console.log(user, isAuthenticated, isLoading, error)
 
   if (isAuthenticated) {
-    const token = getAccessTokenSilently()
-    console.log(token, 'token===')
     return (
       <div>
         <h2>testing with AuthO</h2>
