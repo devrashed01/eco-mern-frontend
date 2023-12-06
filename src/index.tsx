@@ -24,6 +24,7 @@ root.render(
             clientId={process.env.REACT_APP_clientId || ''}
             authorizationParams={{
               redirect_uri: 'https://eco-mern-frontend.vercel.app',
+              audience: process.env.REACT_APP_audience,
             }}
           >
             <BrowserRouter>
