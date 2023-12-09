@@ -120,7 +120,7 @@ export default function LoginPage() {
 }
 
 const LoginButton = () => {
-  const { loginWithRedirect } = useAuth0()
+  const { loginWithPopup } = useAuth0()
 
-  return <button onClick={() => loginWithRedirect()}>Log In</button>
+  return <button onClick={() => loginWithPopup()}>Log In</button>
 }
